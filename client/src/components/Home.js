@@ -25,10 +25,6 @@ const Home = ({ user, logout }) => {
   const classes = useStyles();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  useEffect(() => {
-    console.log(conversations);
-  }, [conversations]);
-
   const addSearchedUsers = (users) => {
     const currentUsers = {};
 
@@ -59,7 +55,6 @@ const Home = ({ user, logout }) => {
   };
 
   const sendMessage = (data, body) => {
-    console.log('sendMessage Fired - Home.js - Line:57');
     socket.emit('new-message', {
       message: data.message,
       recipientId: body.recipientId,
@@ -69,7 +64,6 @@ const Home = ({ user, logout }) => {
 
   const postMessage = async (body) => {
     try {
-      console.log('postMessage Fired - Home.js - Line:65');
       const data = await saveMessage(body);
 
       if (!body.conversationId) {
@@ -86,7 +80,6 @@ const Home = ({ user, logout }) => {
 
   const addNewConvo = useCallback(
     (recipientId, message) => {
-      console.log('addNewConvo Fired - Home.js - Line:81');
       const newMsg = conversations.map((convo) => {
         if (convo.otherUser.id === recipientId) {
           convo.id = message.conversationId;
@@ -103,7 +96,6 @@ const Home = ({ user, logout }) => {
 
   const addMessageToConversation = useCallback(
     (data) => {
-      console.log('addMessageToConversation Fired - Home.js - Line:98');
       // if sender isn't null, that means the message needs to be put in a brand new convo
       const { message, sender = null } = data;
       if (sender !== null) {
@@ -164,7 +156,6 @@ const Home = ({ user, logout }) => {
   // Lifecycle
 
   useEffect(() => {
-    console.log('socket fired');
     // Socket init
     socket.on('add-online-user', addOnlineUser);
     socket.on('remove-offline-user', removeOfflineUser);
