@@ -8,22 +8,20 @@ const Messages = (props) => {
 
   return (
     <Box>
-      {messages // added  sort
-        .sort((a, b) => a.createdAt < b.createdAt && -1)
-        .map((message) => {
-          const time = moment(message.createdAt).format('h:mm');
+      {messages.map((message) => {
+        const time = moment(message.createdAt).format('h:mm');
 
-          return message.senderId === userId ? (
-            <SenderBubble key={message.id} text={message.text} time={time} />
-          ) : (
-            <OtherUserBubble
-              key={message.id}
-              text={message.text}
-              time={time}
-              otherUser={otherUser}
-            />
-          );
-        })}
+        return message.senderId === userId ? (
+          <SenderBubble key={message.id} text={message.text} time={time} />
+        ) : (
+          <OtherUserBubble
+            key={message.id}
+            text={message.text}
+            time={time}
+            otherUser={otherUser}
+          />
+        );
+      })}
     </Box>
   );
 };
