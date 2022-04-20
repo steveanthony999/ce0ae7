@@ -44,9 +44,9 @@ const Input = ({ otherUser, conversationId, user, postMessage }) => {
         <FilledInput
           classes={{ root: classes.input }}
           disableUnderline
-          placeholder='Type something...'
+          placeholder="Type something..."
           value={text}
-          name='text'
+          name="text"
           onChange={handleChange}
         />
       </FormControl>

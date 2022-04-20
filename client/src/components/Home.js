@@ -1,16 +1,16 @@
-import React, { useCallback, useEffect, useState, useContext } from 'react';
-import axios from 'axios';
-import { useHistory } from 'react-router-dom';
-import { Grid, CssBaseline, Button } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import React, { useCallback, useEffect, useState, useContext } from "react";
+import axios from "axios";
+import { useHistory } from "react-router-dom";
+import { Grid, CssBaseline, Button } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 
-import { SidebarContainer } from '../components/Sidebar';
-import { ActiveChat } from '../components/ActiveChat';
-import { SocketContext } from '../context/socket';
+import { SidebarContainer } from "../components/Sidebar";
+import { ActiveChat } from "../components/ActiveChat";
+import { SocketContext } from "../context/socket";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    height: '100vh',
+    height: "100vh",
   },
 }));
 
@@ -50,7 +50,7 @@ const Home = ({ user, logout }) => {
   };
 
   const saveMessage = async (body) => {
-    const { data } = await axios.post('/api/messages', body);
+    const { data } = await axios.post("/api/messages", body);
     return data;
   };
 
@@ -62,7 +62,7 @@ const Home = ({ user, logout }) => {
     });
   };
 
-  const postMessage = async (body) => {
+  const postMessage = (body) => {
     try {
       const data = await saveMessage(body);
 
@@ -82,18 +82,15 @@ const Home = ({ user, logout }) => {
     (recipientId, message) => {
       const newMsg = conversations.map((convo) => {
         if (convo.otherUser.id === recipientId) {
-          convo.id = message.conversationId;
           convo.messages.push(message);
           convo.latestMessageText = message.text;
-          return convo;
+          convo.id = message.conversationId;
         }
-        return convo;
       });
-      setConversations(newMsg);
+      setConversations(conversations);
     },
-    [setConversations, conversations]
+    [setConversations, conversations],
   );
-
   const addMessageToConversation = useCallback(
     (data) => {
       // if sender isn't null, that means the message needs to be put in a brand new convo
@@ -108,17 +105,15 @@ const Home = ({ user, logout }) => {
         setConversations((prev) => [newConvo, ...prev]);
       }
 
-      const addMsg = conversations.map((convo) => {
+      conversations.forEach((convo) => {
         if (convo.id === message.conversationId) {
           convo.messages.push(message);
           convo.latestMessageText = message.text;
-          return convo;
         }
-        return convo;
       });
-      setConversations(addMsg);
+      setConversations(conversations);
     },
-    [setConversations, conversations]
+    [setConversations, conversations],
   );
 
   const setActiveChat = (username) => {
@@ -135,7 +130,7 @@ const Home = ({ user, logout }) => {
         } else {
           return convo;
         }
-      })
+      }),
     );
   }, []);
 
@@ -149,7 +144,7 @@ const Home = ({ user, logout }) => {
         } else {
           return convo;
         }
-      })
+      }),
     );
   }, []);
 
@@ -157,16 +152,16 @@ const Home = ({ user, logout }) => {
 
   useEffect(() => {
     // Socket init
-    socket.on('add-online-user', addOnlineUser);
-    socket.on('remove-offline-user', removeOfflineUser);
-    socket.on('new-message', addMessageToConversation);
+    socket.on("add-online-user", addOnlineUser);
+    socket.on("remove-offline-user", removeOfflineUser);
+    socket.on("new-message", addMessageToConversation);
 
     return () => {
       // before the component is destroyed
       // unbind all event handlers used in this component
-      socket.off('add-online-user', addOnlineUser);
-      socket.off('remove-offline-user', removeOfflineUser);
-      socket.off('new-message', addMessageToConversation);
+      socket.off("add-online-user", addOnlineUser);
+      socket.off("remove-offline-user", removeOfflineUser);
+      socket.off("new-message", addMessageToConversation);
     };
   }, [addMessageToConversation, addOnlineUser, removeOfflineUser, socket]);
 
@@ -178,15 +173,15 @@ const Home = ({ user, logout }) => {
       setIsLoggedIn(true);
     } else {
       // If we were previously logged in, redirect to login instead of register
-      if (isLoggedIn) history.push('/login');
-      else history.push('/register');
+      if (isLoggedIn) history.push("/login");
+      else history.push("/register");
     }
   }, [user, history, isLoggedIn]);
 
   useEffect(() => {
     const fetchConversations = async () => {
       try {
-        const { data } = await axios.get('/api/conversations');
+        const { data } = await axios.get("/api/conversations");
         setConversations(data);
       } catch (error) {
         console.error(error);
@@ -206,7 +201,7 @@ const Home = ({ user, logout }) => {
   return (
     <>
       <Button onClick={handleLogout}>Logout</Button>
-      <Grid container component='main' className={classes.root}>
+      <Grid container component="main" className={classes.root}>
         <CssBaseline />
         <SidebarContainer
           conversations={conversations}
