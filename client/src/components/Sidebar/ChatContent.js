@@ -33,7 +33,7 @@ const ChatContent = ({ conversation }) => {
           {otherUser.username}
         </Typography>
         <Typography className={classes.previewText}>
-          {latestMessageText.slice(0, 14) + '...'}
+          {latestMessageText && latestMessageText.slice(0, 14) + '...'}
         </Typography>
       </Box>
     </Box>
