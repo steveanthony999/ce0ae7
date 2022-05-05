@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Box, Typography, Avatar, Grid } from '@material-ui/core';
+import { Box, Typography, Avatar } from '@material-ui/core';
+import Images from './Images';
+import Text from './Text';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -19,21 +21,6 @@ const useStyles = makeStyles(() => ({
     fontWeight: 'bold',
     marginBottom: 20,
   },
-  bubble: {
-    maxWidth: '185px',
-    backgroundImage: 'linear-gradient(225deg, #6CC1FF 0%, #3A8DFF 100%)',
-  },
-  text: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
-    letterSpacing: -0.2,
-    padding: 8,
-  },
-  imageContainer: {
-    width: '200px',
-    height: '160px',
-  },
 }));
 
 const OtherUserBubble = ({ text, time, otherUser, images }) => {
@@ -45,20 +32,21 @@ const OtherUserBubble = ({ text, time, otherUser, images }) => {
   });
 
   useEffect(() => {
-    images.map((image) =>
-      image
-        ? text &&
-          setRadius({
-            ...radius,
-            bubbleRadius: '0 0 10px 10px',
-            imageRadius: '0 10px 0 0',
-          })
-        : setRadius({
-            ...radius,
-            bubbleRadius: '0 10px 10px 10px',
-            imageRadius: '0 10px 10px 10px',
-          })
-    );
+    images &&
+      images.map((image) =>
+        image
+          ? text &&
+            setRadius({
+              ...radius,
+              bubbleRadius: '0 0 10px 10px',
+              imageRadius: '0 10px 0 0',
+            })
+          : setRadius({
+              ...radius,
+              bubbleRadius: '0 10px 10px 10px',
+              imageRadius: '0 10px 10px 10px',
+            })
+      );
     // shut off 'radius' missing dependency as adding radius creates an infinite loop
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [images, text]);
@@ -74,32 +62,8 @@ const OtherUserBubble = ({ text, time, otherUser, images }) => {
         <Typography className={classes.usernameDate}>
           {otherUser.username} {time}
         </Typography>
-        {images && (
-          <Grid
-            container
-            spacing={2}
-            alignItems='center'
-            justifyContent='flex-end'>
-            {images.map((image) => (
-              <Grid item key={image} className={classes.imageContainer}>
-                <img
-                  src={image}
-                  alt={image}
-                  width='100%'
-                  height='100%'
-                  style={{ borderRadius: radius.imageRadius }}
-                />
-              </Grid>
-            ))}
-          </Grid>
-        )}
-        {text && (
-          <Box
-            className={classes.bubble}
-            style={{ borderRadius: radius.bubbleRadius }}>
-            <Typography className={classes.text}>{text}</Typography>
-          </Box>
-        )}
+        {images && <Images images={images} />}
+        {text && <Text text={text} />}
       </Box>
     </Box>
   );
