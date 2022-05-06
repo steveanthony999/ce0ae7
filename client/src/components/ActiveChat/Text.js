@@ -14,7 +14,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const Text = ({ text, origin }) => {
+const Text = ({ text, origin, withImage }) => {
   const classes = useStyles();
 
   return (
@@ -22,7 +22,13 @@ const Text = ({ text, origin }) => {
       className={classes.bubble}
       style={{
         borderRadius:
-          origin === 'sender' ? '10px 10px 0 10px' : '0 10px 10px 10px',
+          origin === 'sender'
+            ? withImage
+              ? '0 0 0 10px'
+              : '10px 10px 0 10px'
+            : withImage
+            ? '0 0 10px 10px'
+            : '0 10px 10px 10px',
         background:
           origin === 'sender'
             ? '#F4F6FA'

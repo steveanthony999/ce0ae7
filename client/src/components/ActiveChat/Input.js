@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   FormControl,
   FilledInput,
@@ -39,7 +39,6 @@ const Input = ({ otherUser, conversationId, user, postMessage }) => {
   const classes = useStyles();
   const [text, setText] = useState('');
   const [selectedImages, setSelectedImages] = useState([]);
-  const [images, setImages] = useState([]);
 
   const uploadImages = async (files) => {
     const uploader = files.map((image) => {
@@ -58,11 +57,12 @@ const Input = ({ otherUser, conversationId, user, postMessage }) => {
 
     const urls = resArr.map((res) => res.data.url);
 
-    setImages(urls);
+    // setImages(urls);
+    return urls;
   };
 
-  const sendForm = async (e) => {
-    const form = e.currentTarget;
+  const sendForm = async (e, images) => {
+    const form = e.target;
     const formElements = form.elements;
     // add sender user info if posting to a brand new convo, so that the other user will have access to username, profile pic, etc.
     const reqBody = {
@@ -75,23 +75,23 @@ const Input = ({ otherUser, conversationId, user, postMessage }) => {
     await postMessage(reqBody);
     setText('');
     setSelectedImages([]);
-    setImages([]);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Step 1 - check to see if there are any images selected
     if (selectedImages.length > 0) {
-      uploadImages(selectedImages);
-      sendForm(e);
+      // Step 2 with images - map through selected images and upload to cloudinary, then set images array with the results
+      const imageURLS = await uploadImages(selectedImages);
+
+      // Step 3 with images - send the form
+      sendForm(e, imageURLS);
     } else {
-      sendForm(e);
+      // Step 2 without images
+      sendForm(e, null);
     }
   };
-
-  useEffect(() => {
-    console.log(images);
-  }, [images]);
 
   return (
     <form className={classes.root} onSubmit={handleSubmit}>
