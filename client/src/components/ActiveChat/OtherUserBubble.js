@@ -1,8 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Box, Typography, Avatar } from '@material-ui/core';
-import Images from './Images';
-import Text from './Text';
+import { Box, Avatar } from '@material-ui/core';
+import Message from './Message';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -14,12 +13,6 @@ const useStyles = makeStyles(() => ({
     width: 30,
     marginRight: 11,
     marginTop: 6,
-  },
-  usernameDate: {
-    fontSize: 11,
-    color: '#BECCE2',
-    fontWeight: 'bold',
-    marginBottom: 5,
   },
 }));
 
@@ -33,22 +26,7 @@ const OtherUserBubble = ({ text, time, otherUser, images }) => {
         src={otherUser.photoUrl}
         className={classes.avatar}
       />
-      <Box>
-        <Typography className={classes.usernameDate}>
-          {otherUser.username} {time}
-        </Typography>
-        {images && images.length > 1 ? (
-          <>
-            {text && <Text text={text} />}{' '}
-            {<Images images={images} multiImageWithText={text && true} />}
-          </>
-        ) : (
-          <>
-            {images && <Images images={images} withText={text && true} />}
-            {text && <Text text={text} withImage={images && true} />}
-          </>
-        )}
-      </Box>
+      <Message text={text} time={time} images={images} origin={otherUser} />
     </Box>
   );
 };

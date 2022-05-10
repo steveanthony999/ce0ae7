@@ -45,10 +45,10 @@ const Input = ({ otherUser, conversationId, user, postMessage }) => {
       const formData = new FormData();
 
       formData.append('file', image);
-      formData.append('upload_preset', 'ujee1bqo');
+      formData.append('upload_preset', process.env.REACT_APP_CLOUDINARY_KEY);
 
       return instance.post(
-        'https://api.cloudinary.com/v1_1/dknh8hdvp/image/upload',
+        `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}/image/upload`,
         formData
       );
     });
@@ -57,7 +57,6 @@ const Input = ({ otherUser, conversationId, user, postMessage }) => {
 
     const urls = resArr.map((res) => res.data.url);
 
-    // setImages(urls);
     return urls;
   };
 
@@ -80,15 +79,11 @@ const Input = ({ otherUser, conversationId, user, postMessage }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Step 1 - check to see if there are any images selected
     if (selectedImages.length > 0) {
-      // Step 2 with images - map through selected images and upload to cloudinary, then set images array with the results
       const imageURLS = await uploadImages(selectedImages);
 
-      // Step 3 with images - send the form
       sendForm(e, imageURLS);
     } else {
-      // Step 2 without images
       sendForm(e, null);
     }
   };
