@@ -7,10 +7,23 @@ const useStyles = makeStyles(() => ({
     width: '200px',
     height: '160px',
   },
+  imageStyles: {
+    borderRadius: (props) =>
+      props.origin === 'sender'
+        ? props.withText
+          ? '10px 10px 0 0'
+          : '10px 10px 0 10px'
+        : props.withText
+        ? '0 10px 0 0'
+        : '0 10px 10px 10px',
+    marginTop: (props) =>
+      props.images.length > 1 ? (props.multiImageWithText ? '10px' : 0) : 0,
+  },
 }));
 
-const Images = ({ images, origin, withText, multiImageWithText }) => {
-  const classes = useStyles();
+const Images = (props) => {
+  const { images } = props;
+  const classes = useStyles(props);
 
   return (
     <Grid container spacing={2} alignItems='center' justifyContent='flex-end'>
@@ -21,18 +34,7 @@ const Images = ({ images, origin, withText, multiImageWithText }) => {
             alt={image}
             width='100%'
             height='100%'
-            style={{
-              borderRadius:
-                origin === 'sender'
-                  ? withText
-                    ? '10px 10px 0 0'
-                    : '10px 10px 0 10px'
-                  : withText
-                  ? '0 10px 0 0'
-                  : '0 10px 10px 10px',
-              marginTop:
-                images.length > 1 ? (multiImageWithText ? '10px' : 0) : 0,
-            }}
+            className={classes.imageStyles}
           />
         </Grid>
       ))}

@@ -10,20 +10,18 @@ const useStyles = makeStyles(() => ({
     color: '#BECCE2',
     fontWeight: 'bold',
     marginBottom: 5,
+    textAlign: (props) => props.origin === 'sender' && 'right',
   },
 }));
 
-const Message = ({ time, text, images, origin }) => {
-  const classes = useStyles();
+const Message = (props) => {
+  const { time, text, images, origin } = props;
+  const classes = useStyles(props);
 
   return (
     <Box>
       {origin === 'sender' ? (
-        <Typography
-          className={classes.date}
-          style={{ textAlign: origin === 'sender' && 'right' }}>
-          {time}
-        </Typography>
+        <Typography className={classes.date}>{time}</Typography>
       ) : (
         <Typography className={classes.date}>
           {origin.username} {time}
